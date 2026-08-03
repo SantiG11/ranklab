@@ -1,3 +1,5 @@
+import TemplateCard from "../components/TemplateCard";
+
 export function HomePage() {
   return (
     <main className="app-page">
@@ -22,17 +24,9 @@ export function HomePage() {
           </div>
 
           <div className="grid grid-cols-1 justify-items-center gap-4 rounded-3xl border border-app-border bg-app-bg-soft p-4 sm:grid-cols-3">
-            <div className="app-card app-card-hover flex aspect-square h-full w-full items-center justify-center overflow-hidden p-2 sm:max-w-64">
-              Template
-            </div>
-
-            <div className="app-card app-card-hover flex aspect-square h-full w-full items-center justify-center overflow-hidden p-2 sm:max-w-64">
-              Template
-            </div>
-
-            <div className="app-card app-card-hover flex aspect-square h-full w-full items-center justify-center overflow-hidden p-2 sm:max-w-64">
-              Template
-            </div>
+            <TemplateCard title="Spiderman Movies" />
+            <TemplateCard title="Favourite Sports" />
+            <TemplateCard title="Desserts" />
           </div>
         </section>
       </div>
