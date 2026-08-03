@@ -24,9 +24,9 @@ export function HomePage() {
           </div>
 
           <div className="grid grid-cols-1 justify-items-center gap-4 rounded-3xl border border-app-border bg-app-bg-soft p-4 sm:grid-cols-3">
-            <TemplateCard title="Spiderman Movies" />
-            <TemplateCard title="Favourite Sports" />
-            <TemplateCard title="Desserts" />
+            <TemplateCard title="Spiderman Movies" id="spiderman-movies" />
+            <TemplateCard title="Favourite Sports" id="favourite-sports" />
+            <TemplateCard title="Desserts" id="desserts" />
           </div>
         </section>
       </div>
