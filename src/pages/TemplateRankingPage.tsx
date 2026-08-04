@@ -1,6 +1,7 @@
 import { useParams } from "react-router";
 import { templates } from "../features/templates/templateData";
 import { NotFoundPage } from "./NotFoundPage";
+import RankingItemCard from "../components/RankingItemCard";
 
 const tiers = [
   { name: "S", id: "tier-s", items: [1, 2, 3, 4, 5] },
@@ -23,15 +24,15 @@ export function TemplateRankingPage() {
       <div className="app-container flex flex-col gap-5 py-10">
         <section className="app-section flex flex-col gap-2 p-4">
           <h1 className="app-title mt-3 text-center text-5xl">
-            {template?.title}
+            {template.title}
           </h1>
 
           <p className="app-subtitle text-center mt-3">
-            {template?.description}
+            {template.description}
           </p>
 
           <p className=" text-text-soft text-right">
-            Category: <label className="font-bold">{template?.category}</label>
+            Category: <span className="font-bold">{template.category}</span>
           </p>
         </section>
 
@@ -48,16 +49,10 @@ export function TemplateRankingPage() {
 
                 <div className="grid min-w-0 grid-cols-[repeat(auto-fill,minmax(7rem,1fr))] gap-0 bg-app-bg-soft">
                   {tier.items.map((item) => (
-                    <div
-                      key={item}
-                      className="aspect-square min-w-0 overflow-hidden border border-app-border"
-                    >
-                      <div className="flex h-full w-full items-center justify-center bg-tier-s">
-                        <p className="text-center text-sm font-semibold text-white">
-                          Item
-                        </p>
-                      </div>
-                    </div>
+                    <RankingItemCard
+                      key={`${tier.id}-${item}`}
+                      title={`Item ${item}`}
+                    />
                   ))}
                 </div>
               </div>
@@ -66,16 +61,10 @@ export function TemplateRankingPage() {
 
           <div className="grid min-h-[7rem] w-full max-w-5xl grid-cols-[repeat(auto-fill,minmax(7rem,1fr))] gap-0 overflow-hidden rounded-2xl border border-app-border bg-app-bg-soft">
             {unrankedItems.map((item) => (
-              <div
-                key={item}
-                className="aspect-square min-w-0 overflow-hidden border border-app-border"
-              >
-                <div className="flex h-full w-full items-center justify-center bg-app-surface-elevated">
-                  <p className="text-center text-sm font-semibold text-text-soft">
-                    Item
-                  </p>
-                </div>
-              </div>
+              <RankingItemCard
+                key={`unranked-${item}`}
+                title={`Item ${item}`}
+              />
             ))}
           </div>
         </section>
