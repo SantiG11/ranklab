@@ -1,4 +1,5 @@
 import TemplateCard from "../components/TemplateCard";
+import { templates } from "../features/templates/templateData";
 
 export function HomePage() {
   return (
@@ -24,9 +25,9 @@ export function HomePage() {
           </div>
 
           <div className="grid grid-cols-1 justify-items-center gap-4 rounded-3xl border border-app-border bg-app-bg-soft p-4 sm:grid-cols-3">
-            <TemplateCard title="Spiderman Movies" id="spiderman-movies" />
-            <TemplateCard title="Favourite Sports" id="favourite-sports" />
-            <TemplateCard title="Desserts" id="desserts" />
+            {templates.map((template) => {
+              return <TemplateCard title={template.title} id={template.id} />;
+            })}
           </div>
         </section>
       </div>

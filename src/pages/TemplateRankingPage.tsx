@@ -1,4 +1,6 @@
 import { useParams } from "react-router";
+import { templates } from "../features/templates/templateData";
+import { NotFoundPage } from "./NotFoundPage";
 
 const tiers = [
   { name: "S", id: "tier-s", items: [1, 2, 3, 4, 5] },
@@ -12,18 +14,25 @@ const unrankedItems = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
 export function TemplateRankingPage() {
   const { id } = useParams();
+  const template = templates.find((template) => template.id === id);
+
+  if (!template) return <NotFoundPage />;
 
   return (
     <main className="app-page">
       <div className="app-container flex flex-col gap-5 py-10">
         <section className="app-section flex flex-col gap-2 p-4">
-          <h1 className="app-title mt-3 text-center text-5xl">{id}</h1>
+          <h1 className="app-title mt-3 text-center text-5xl">
+            {template?.title}
+          </h1>
 
-          <p className="app-subtitle mt-3">
-            Ranking editor placeholder. Description of the ranking.
+          <p className="app-subtitle text-center mt-3">
+            {template?.description}
           </p>
 
-          <p className="font-bold text-text-soft">Category: Ranking Category</p>
+          <p className=" text-text-soft text-right">
+            Category: <label className="font-bold">{template?.category}</label>
+          </p>
         </section>
 
         <section className="app-section flex w-full flex-col items-center gap-5 p-5">
