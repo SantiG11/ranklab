@@ -1,21 +1,76 @@
 import { useParams } from "react-router";
 
+const tiers = [
+  { name: "S", id: "tier-s", items: [1, 2, 3, 4, 5] },
+  { name: "A", id: "tier-a", items: [1, 2, 3] },
+  { name: "B", id: "tier-b", items: [1, 2, 3, 4, 5, 6, 7] },
+  { name: "C", id: "tier-c", items: [1, 2] },
+  { name: "D", id: "tier-d", items: [1, 2, 3, 4, 5] },
+];
+
+const unrankedItems = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+
 export function TemplateRankingPage() {
   const { id } = useParams();
 
   return (
-    <main className="mx-auto max-w-6xl px-6 py-10">
-      <section className="rounded-3xl border border-slate-800 bg-slate-900 p-8">
-        <p className="text-sm font-medium text-violet-400">Template page</p>
+    <main className="app-page">
+      <div className="app-container flex flex-col gap-5 py-10">
+        <section className="app-section flex flex-col gap-2 p-4">
+          <h1 className="app-title mt-3 text-center text-5xl">{id}</h1>
 
-        <h1 className="mt-3 text-3xl font-bold text-slate-50">
-          Template: {id}
-        </h1>
+          <p className="app-subtitle mt-3">
+            Ranking editor placeholder. Description of the ranking.
+          </p>
 
-        <p className="mt-3 text-slate-400">
-          Ranking editor placeholder. The tier list will be built here later.
-        </p>
-      </section>
+          <p className="font-bold text-text-soft">Category: Ranking Category</p>
+        </section>
+
+        <section className="app-section flex w-full flex-col items-center gap-5 p-5">
+          <div className="w-full max-w-5xl overflow-hidden rounded-2xl border border-app-border">
+            {tiers.map((tier) => (
+              <div
+                key={tier.id}
+                className="grid grid-cols-[7rem_minmax(0,1fr)] border-b border-app-border last:border-b-0"
+              >
+                <div className="flex min-h-20 items-center justify-center border-r-2 border-app-border p-2">
+                  <span className="app-title text-2xl">{tier.name}</span>
+                </div>
+
+                <div className="grid min-w-0 grid-cols-[repeat(auto-fill,minmax(7rem,1fr))] gap-0 bg-app-bg-soft">
+                  {tier.items.map((item) => (
+                    <div
+                      key={item}
+                      className="aspect-square min-w-0 overflow-hidden border border-app-border"
+                    >
+                      <div className="flex h-full w-full items-center justify-center bg-tier-s">
+                        <p className="text-center text-sm font-semibold text-white">
+                          Item
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="grid min-h-[7rem] w-full max-w-5xl grid-cols-[repeat(auto-fill,minmax(7rem,1fr))] gap-0 overflow-hidden rounded-2xl border border-app-border bg-app-bg-soft">
+            {unrankedItems.map((item) => (
+              <div
+                key={item}
+                className="aspect-square min-w-0 overflow-hidden border border-app-border"
+              >
+                <div className="flex h-full w-full items-center justify-center bg-app-surface-elevated">
+                  <p className="text-center text-sm font-semibold text-text-soft">
+                    Item
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+      </div>
     </main>
   );
 }
