@@ -3,13 +3,23 @@ import RankingItemCard from "./RankingItemCard";
 type TierRowProps = {
   name: string;
   id: string;
+  isSelected?: boolean;
+  selectedItem?: string;
+  onSelect: (id: string) => void;
   items: {
     id: string;
     title: string;
   }[];
 };
 
-export default function TierRow({ id, name, items }: TierRowProps) {
+export default function TierRow({
+  id,
+  name,
+  items,
+  isSelected,
+  selectedItem,
+  onSelect,
+}: TierRowProps) {
   return (
     <div
       key={id}
@@ -21,7 +31,13 @@ export default function TierRow({ id, name, items }: TierRowProps) {
 
       <div className="grid min-w-0 grid-cols-[repeat(auto-fill,minmax(7rem,1fr))] gap-0 bg-app-bg-soft">
         {items.map((item: { id: string; title: string }) => (
-          <RankingItemCard key={`${id}-${item.id}`} title={item.title} />
+          <RankingItemCard
+            key={`${id}-${item.id}`}
+            id={item.id}
+            title={item.title}
+            isSelected={isSelected || selectedItem === item.id}
+            onSelect={onSelect}
+          />
         ))}
       </div>
     </div>

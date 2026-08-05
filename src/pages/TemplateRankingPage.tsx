@@ -14,6 +14,8 @@ export function TemplateRankingPage() {
   const [tiers, setTiers] = useState(template.tiers);
   const [unrankedItems, setUnrankedItems] = useState(template.unrankedItems);
 
+  const [selectedItemId, setSelectedItemId] = useState<string | null>(null);
+
   return (
     <main className="app-page">
       <div className="app-container flex flex-col gap-5 py-10">
@@ -34,13 +36,31 @@ export function TemplateRankingPage() {
         <section className="app-section flex w-full flex-col items-center gap-5 p-5">
           <div className="w-full max-w-5xl overflow-hidden rounded-2xl border border-app-border">
             {tiers.map((tier) => (
-              <TierRow name={tier.name} id={tier.id} items={tier.items} />
+              <TierRow
+                name={tier.name}
+                id={tier.id}
+                items={tier.items}
+                selectedItem={selectedItemId ? selectedItemId : ""}
+                onSelect={setSelectedItemId}
+              />
             ))}
           </div>
 
+          {selectedItemId ? (
+            <p>Selected item: {selectedItemId}</p>
+          ) : (
+            <p>No item selected</p>
+          )}
+
           <div className="grid min-h-[7rem] w-full max-w-5xl grid-cols-[repeat(auto-fill,minmax(7rem,1fr))] gap-0 overflow-hidden rounded-2xl border border-app-border bg-app-bg-soft">
             {unrankedItems.map((item) => (
-              <RankingItemCard key={`unranked-${item.id}`} title={item.title} />
+              <RankingItemCard
+                key={`unranked-${item.id}`}
+                id={item.id}
+                title={item.title}
+                isSelected={selectedItemId === item.id}
+                onSelect={setSelectedItemId}
+              />
             ))}
           </div>
         </section>

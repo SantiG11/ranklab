@@ -45,7 +45,11 @@ export const templates = [
     category: "Food",
     tiers: [
       { id: "tier-s", name: "S", items: [] },
-      { id: "tier-a", name: "A", items: [] },
+      {
+        id: "tier-a",
+        name: "A",
+        items: [{ id: "carrot-cake", title: "Carrot cake" }],
+      },
       { id: "tier-b", name: "B", items: [] },
       { id: "tier-c", name: "C", items: [] },
       { id: "tier-d", name: "D", items: [] },
