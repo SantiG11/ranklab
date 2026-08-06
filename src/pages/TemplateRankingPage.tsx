@@ -5,16 +5,23 @@ import RankingItemCard from "../components/RankingItemCard";
 import TierRow from "../components/TierRow";
 import { useState } from "react";
 
+type Template = (typeof templates)[number];
+
 export function TemplateRankingPage() {
   const { id } = useParams();
   const template = templates.find((template) => template.id === id);
 
   if (!template) return <NotFoundPage />;
 
-  const [tiers, setTiers] = useState(template.tiers);
-  const [unrankedItems, setUnrankedItems] = useState(template.unrankedItems);
+  return <TemplateRankingEditor template={template} />;
+}
+
+function TemplateRankingEditor({ template }: { template: Template }) {
+  const [tiers] = useState(template.tiers);
+  const [unrankedItems] = useState(template.unrankedItems);
 
   const [selectedItemId, setSelectedItemId] = useState<string | null>(null);
+  const [selectedTierId, setSelectedTierId] = useState<string | null>(null);
 
   return (
     <main className="app-page">
@@ -37,11 +44,14 @@ export function TemplateRankingPage() {
           <div className="w-full max-w-5xl overflow-hidden rounded-2xl border border-app-border">
             {tiers.map((tier) => (
               <TierRow
+                key={tier.id}
                 name={tier.name}
                 id={tier.id}
                 items={tier.items}
                 selectedItem={selectedItemId ? selectedItemId : ""}
-                onSelect={setSelectedItemId}
+                onItemSelect={setSelectedItemId}
+                isTierSelected={selectedTierId === tier.id}
+                onTierSelect={setSelectedTierId}
               />
             ))}
           </div>

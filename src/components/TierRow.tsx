@@ -3,9 +3,11 @@ import RankingItemCard from "./RankingItemCard";
 type TierRowProps = {
   name: string;
   id: string;
-  isSelected?: boolean;
+  isTierSelected: boolean;
+  onTierSelect: (id: string) => void;
+  isItemSelected?: boolean;
   selectedItem?: string;
-  onSelect: (id: string) => void;
+  onItemSelect: (id: string) => void;
   items: {
     id: string;
     title: string;
@@ -15,10 +17,12 @@ type TierRowProps = {
 export default function TierRow({
   id,
   name,
+  isTierSelected,
+  onTierSelect,
   items,
-  isSelected,
+  isItemSelected,
   selectedItem,
-  onSelect,
+  onItemSelect,
 }: TierRowProps) {
   return (
     <div
@@ -29,17 +33,24 @@ export default function TierRow({
         <span className="app-title text-2xl">{name}</span>
       </div>
 
-      <div className="grid min-w-0 grid-cols-[repeat(auto-fill,minmax(7rem,1fr))] gap-0 bg-app-bg-soft">
+      <button
+        onClick={() => onTierSelect(id)}
+        className={`grid min-w-0 grid-cols-[repeat(auto-fill,minmax(7rem,1fr))] gap-0 bg-app-bg-soft  ${
+          isTierSelected
+            ? "border-brand bg-brand-soft shadow-[0_0_0_1px_rgba(124,58,237,0.35)] hover:border-brand-hover hover:bg-brand"
+            : "border-app-border bg-app-surface-elevated hover:-translate-y-0.5 hover:border-app-border-soft hover:bg-app-surface hover:shadow-lg hover:shadow-black/20"
+        }`}
+      >
         {items.map((item: { id: string; title: string }) => (
           <RankingItemCard
             key={`${id}-${item.id}`}
             id={item.id}
             title={item.title}
-            isSelected={isSelected || selectedItem === item.id}
-            onSelect={onSelect}
+            isSelected={isItemSelected || selectedItem === item.id}
+            onSelect={onItemSelect}
           />
         ))}
-      </div>
+      </button>
     </div>
   );
 }
