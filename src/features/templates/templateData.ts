@@ -1,4 +1,6 @@
-export const templates = [
+import type { Template } from "./templateTypes";
+
+export const templates: Template[] = [
   {
     id: "spiderman-movies",
     title: "Spider-Man Movies",
