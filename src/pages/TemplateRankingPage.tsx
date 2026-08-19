@@ -60,6 +60,41 @@ function TemplateRankingEditor({ template }: { template: Template }) {
     );
   }
 
+  function moveSelectedItemToUnranked() {
+    if (!selectedItemId) return;
+
+    const selectedItem = tiers
+      .flatMap((tier) => tier.items)
+      .find((item) => item.id === selectedItemId);
+
+    if (!selectedItem) return;
+
+    setTiers((prevTiers) =>
+      prevTiers.map((tier) => {
+        const itemsWithoutSelectedItem = tier.items.filter(
+          (item) => item.id !== selectedItem.id,
+        );
+
+        return {
+          ...tier,
+          items: itemsWithoutSelectedItem,
+        };
+      }),
+    );
+
+    setUnrankedItems((prevItems) => {
+      const alreadyUnranked = prevItems.some(
+        (item) => item.id === selectedItem.id,
+      );
+
+      if (alreadyUnranked) return prevItems;
+
+      return [...prevItems, selectedItem];
+    });
+
+    setSelectedTierId(null);
+  }
+
   return (
     <main className="app-page">
       <div className="app-container flex flex-col gap-5 py-10">
@@ -100,6 +135,13 @@ function TemplateRankingEditor({ template }: { template: Template }) {
           )}
 
           <div className="grid min-h-[7rem] w-full max-w-5xl grid-cols-[repeat(auto-fill,minmax(7rem,1fr))] gap-0 overflow-hidden rounded-2xl border border-app-border bg-app-bg-soft">
+            <button
+              type="button"
+              onClick={() => moveSelectedItemToUnranked()}
+              className="flex min-h-20 items-center justify-center border-r-2 border-app-border p-2"
+            >
+              Unranked
+            </button>
             {unrankedItems.map((item) => (
               <RankingItemCard
                 key={`unranked-${item.id}`}
