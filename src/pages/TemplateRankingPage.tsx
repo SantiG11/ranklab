@@ -95,6 +95,12 @@ function TemplateRankingEditor({ template }: { template: Template }) {
     setSelectedTierId(null);
   }
 
+  function resetTemplate() {
+    setTiers(template.tiers);
+    setUnrankedItems(template.unrankedItems);
+    setSelectedItemId(null);
+    setSelectedItemId(null);
+  }
   return (
     <main className="app-page">
       <div className="app-container flex flex-col gap-5 py-10">
@@ -127,6 +133,13 @@ function TemplateRankingEditor({ template }: { template: Template }) {
               />
             ))}
           </div>
+
+          <button
+            onClick={() => resetTemplate()}
+            className="app-button-secondary"
+          >
+            Reset Template
+          </button>
 
           {selectedItemId ? (
             <p>Selected item: {selectedItemId}</p>
