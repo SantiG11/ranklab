@@ -29,12 +29,14 @@ export default function TierRow({
       key={id}
       className="grid grid-cols-[7rem_minmax(0,1fr)] border-b border-app-border last:border-b-0"
     >
-      <div className="flex min-h-20 items-center justify-center border-r-2 border-app-border p-2">
-        <span className="app-title text-2xl">{name}</span>
-      </div>
-
       <button
         onClick={() => onTierSelect(id)}
+        className="flex min-h-20 items-center justify-center border-r-2 border-app-border p-2"
+      >
+        <span className="app-title text-2xl">{name}</span>
+      </button>
+
+      <div
         className={`grid min-w-0 grid-cols-[repeat(auto-fill,minmax(7rem,1fr))] gap-0 bg-app-bg-soft  ${
           isTierSelected
             ? "border-brand bg-brand-soft shadow-[0_0_0_1px_rgba(124,58,237,0.35)] hover:border-brand-hover hover:bg-brand"
@@ -50,7 +52,7 @@ export default function TierRow({
             onSelect={onItemSelect}
           />
         ))}
-      </button>
+      </div>
     </div>
   );
 }

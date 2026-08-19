@@ -4,6 +4,7 @@ import { NotFoundPage } from "./NotFoundPage";
 import RankingItemCard from "../components/RankingItemCard";
 import TierRow from "../components/TierRow";
 import { useState } from "react";
+import type { RankingItem } from "../features/templates/templateTypes";
 
 type Template = (typeof templates)[number];
 
@@ -17,11 +18,47 @@ export function TemplateRankingPage() {
 }
 
 function TemplateRankingEditor({ template }: { template: Template }) {
-  const [tiers] = useState(template.tiers);
-  const [unrankedItems] = useState(template.unrankedItems);
+  const [tiers, setTiers] = useState(template.tiers);
+  const [unrankedItems, setUnrankedItems] = useState(template.unrankedItems);
 
   const [selectedItemId, setSelectedItemId] = useState<string | null>(null);
   const [selectedTierId, setSelectedTierId] = useState<string | null>(null);
+
+  function moveSelectedItemToTier(targetTierId: string) {
+    if (!selectedItemId) return;
+
+    const selectedItem =
+      unrankedItems.find((item) => item.id === selectedItemId) ??
+      tiers
+        .flatMap((tier) => tier.items)
+        .find((item) => item.id === selectedItemId);
+
+    if (!selectedItem) return;
+
+    setUnrankedItems((prevItems) =>
+      prevItems.filter((item) => item.id !== selectedItemId),
+    );
+
+    setTiers((prevTiers) =>
+      prevTiers.map((tier) => {
+        const itemsWithoutSelectedItem = tier.items.filter(
+          (item) => item.id !== selectedItemId,
+        );
+
+        if (tier.id !== targetTierId) {
+          return {
+            ...tier,
+            items: itemsWithoutSelectedItem,
+          };
+        }
+
+        return {
+          ...tier,
+          items: [...itemsWithoutSelectedItem, selectedItem],
+        };
+      }),
+    );
+  }
 
   return (
     <main className="app-page">
@@ -51,7 +88,7 @@ function TemplateRankingEditor({ template }: { template: Template }) {
                 selectedItem={selectedItemId ? selectedItemId : ""}
                 onItemSelect={setSelectedItemId}
                 isTierSelected={selectedTierId === tier.id}
-                onTierSelect={setSelectedTierId}
+                onTierSelect={moveSelectedItemToTier}
               />
             ))}
           </div>
