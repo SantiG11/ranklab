@@ -3,7 +3,7 @@ import { templates } from "../features/templates/templateData";
 import { NotFoundPage } from "./NotFoundPage";
 import RankingItemCard from "../components/RankingItemCard";
 import TierRow from "../components/TierRow";
-import { useState } from "react";
+import { Fragment, useState } from "react";
 
 type Template = (typeof templates)[number];
 
@@ -30,8 +30,10 @@ function TemplateRankingEditor({ template }: { template: Template }) {
 
   // Moving items functions
   function moveSelectedItemToTier(targetTierId: string) {
-    if (!selectedItemId) return;
-
+    if (!selectedItemId) {
+      setSelectedTierId(targetTierId);
+      return;
+    }
     // Finds the selected item on the unranked items or on any tier and save it
     const selectedItem =
       unrankedItems.find((item) => item.id === selectedItemId) ??
@@ -59,15 +61,15 @@ function TemplateRankingEditor({ template }: { template: Template }) {
             items: itemsWithoutSelectedItem,
           };
         }
-
-        setSelectedTierId(targetTierId);
-
         return {
           ...tier,
           items: [...itemsWithoutSelectedItem, selectedItem],
         };
       }),
     );
+
+    setSelectedTierId(null);
+    setSelectedItemId(null);
   }
 
   function moveSelectedItemToUnranked() {
@@ -128,8 +130,17 @@ function TemplateRankingEditor({ template }: { template: Template }) {
     resetTemplate();
     setIsResetConfirmOpen(false);
   }
+
+  // Tier editing functions
+  function updateTierName(tierId: string, newName: string) {
+    setTiers((prevTiers) =>
+      prevTiers.map((tier) =>
+        tier.id === tierId ? { ...tier, name: newName } : tier,
+      ),
+    );
+  }
   return (
-    <main className="app-page">
+    <main className="app-page" onClick={() => setSelectedTierId(null)}>
       <div className="app-container flex flex-col gap-5 py-10">
         {/* Title section */}
         <section className="app-section flex flex-col gap-2 p-4">
@@ -149,18 +160,32 @@ function TemplateRankingEditor({ template }: { template: Template }) {
         {/* Ranking section */}
         <section className="app-section flex w-full flex-col items-center gap-5 p-5">
           {/* Tiers */}
-          <div className="w-full max-w-5xl overflow-hidden rounded-2xl border border-app-border">
+          <div
+            className="w-full max-w-5xl overflow-hidden rounded-2xl border border-app-border"
+            onClick={(event) => event.stopPropagation()}
+          >
             {tiers.map((tier) => (
-              <TierRow
-                key={tier.id}
-                name={tier.name}
-                id={tier.id}
-                items={tier.items}
-                selectedItem={selectedItemId ? selectedItemId : ""}
-                onItemSelect={setSelectedItemId}
-                isTierSelected={selectedTierId === tier.id}
-                onTierSelect={moveSelectedItemToTier}
-              />
+              <Fragment key={tier.id}>
+                <TierRow
+                  key={tier.id}
+                  name={tier.name}
+                  id={tier.id}
+                  items={tier.items}
+                  selectedItem={selectedItemId ? selectedItemId : ""}
+                  onItemSelect={setSelectedItemId}
+                  isTierSelected={selectedTierId === tier.id}
+                  onTierSelect={moveSelectedItemToTier}
+                />
+                {selectedTierId === tier.id && !selectedItemId && (
+                  <input
+                    type="text"
+                    className="bg-white text-black"
+                    onChange={(event) =>
+                      updateTierName(tier.id, event.target.value)
+                    }
+                  />
+                )}
+              </Fragment>
             ))}
           </div>
 
@@ -204,6 +229,12 @@ function TemplateRankingEditor({ template }: { template: Template }) {
             <p>Selected item: {selectedItemId}</p>
           ) : (
             <p>No item selected</p>
+          )}
+
+          {selectedTierId ? (
+            <p>Selected item: {selectedTierId}</p>
+          ) : (
+            <p>No tier selected</p>
           )}
 
           {/* Unranked items */}
