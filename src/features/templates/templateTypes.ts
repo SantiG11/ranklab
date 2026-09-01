@@ -6,6 +6,7 @@ export type RankingItem = {
 export type Tier = {
   id: string;
   name: string;
+  color: string;
   items: RankingItem[];
 };
 

@@ -170,6 +170,7 @@ function TemplateRankingEditor({ template }: { template: Template }) {
                   key={tier.id}
                   name={tier.name}
                   id={tier.id}
+                  color={tier.color}
                   items={tier.items}
                   selectedItem={selectedItemId ? selectedItemId : ""}
                   onItemSelect={setSelectedItemId}

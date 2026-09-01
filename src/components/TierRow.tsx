@@ -3,6 +3,7 @@ import RankingItemCard from "./RankingItemCard";
 type TierRowProps = {
   name: string;
   id: string;
+  color: string;
   isTierSelected: boolean;
   onTierSelect: (id: string) => void;
   isItemSelected?: boolean;
@@ -14,9 +15,18 @@ type TierRowProps = {
   }[];
 };
 
+const tierColorClasses: Record<string, string> = {
+  "tier-s": "bg-tier-s",
+  "tier-a": "bg-tier-a",
+  "tier-b": "bg-tier-b",
+  "tier-c": "bg-tier-c",
+  "tier-d": "bg-tier-d",
+};
+
 export default function TierRow({
   id,
   name,
+  color,
   isTierSelected,
   onTierSelect,
   items,
@@ -24,6 +34,7 @@ export default function TierRow({
   selectedItem,
   onItemSelect,
 }: TierRowProps) {
+  const tierColorClass = tierColorClasses[color] ?? "bg-app-surface-elevated";
   return (
     <div
       key={id}
@@ -31,7 +42,7 @@ export default function TierRow({
     >
       <button
         onClick={() => onTierSelect(id)}
-        className="flex min-h-20 items-center justify-center border-r-2 border-app-border p-2"
+        className={`flex min-h-20 items-center justify-center border-r-2 border-app-border p-2 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-brand focus:ring-inset ${tierColorClass}`}
       >
         <span className="app-title text-2xl">{name}</span>
       </button>
