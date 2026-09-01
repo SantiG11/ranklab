@@ -139,6 +139,14 @@ function TemplateRankingEditor({ template }: { template: Template }) {
       ),
     );
   }
+
+  function updateTierColor(tierId: string, newColor: string) {
+    setTiers((prevTiers) =>
+      prevTiers.map((tier) =>
+        tier.id === tierId ? { ...tier, color: newColor } : tier,
+      ),
+    );
+  }
   return (
     <main className="app-page" onClick={() => setSelectedTierId(null)}>
       <div className="app-container flex flex-col gap-5 py-10">
@@ -185,6 +193,21 @@ function TemplateRankingEditor({ template }: { template: Template }) {
                       updateTierName(tier.id, event.target.value)
                     }
                   />
+                )}
+                {selectedTierId === tier.id && !selectedItemId && (
+                  <select
+                    className="bg-white text-black"
+                    value={tier.color}
+                    onChange={(event) =>
+                      updateTierColor(tier.id, event.target.value)
+                    }
+                  >
+                    <option value="tier-s">Red</option>
+                    <option value="tier-a">Orange</option>
+                    <option value="tier-b">Yellow</option>
+                    <option value="tier-c">Green</option>
+                    <option value="tier-d">Blue</option>
+                  </select>
                 )}
               </Fragment>
             ))}
