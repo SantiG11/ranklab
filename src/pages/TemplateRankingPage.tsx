@@ -4,6 +4,7 @@ import { NotFoundPage } from "./NotFoundPage";
 import RankingItemCard from "../components/RankingItemCard";
 import TierRow from "../components/TierRow";
 import { Fragment, useState } from "react";
+import UnrankedItemsSection from "../components/UnrankedItemsSection";
 
 type Template = (typeof templates)[number];
 
@@ -249,37 +250,13 @@ function TemplateRankingEditor({ template }: { template: Template }) {
             </div>
           )}
 
-          {selectedItemId ? (
-            <p>Selected item: {selectedItemId}</p>
-          ) : (
-            <p>No item selected</p>
-          )}
-
-          {selectedTierId ? (
-            <p>Selected item: {selectedTierId}</p>
-          ) : (
-            <p>No tier selected</p>
-          )}
-
           {/* Unranked items */}
-          <div className="grid min-h-[7rem] w-full max-w-5xl grid-cols-[repeat(auto-fill,minmax(7rem,1fr))] gap-0 overflow-hidden rounded-2xl border border-app-border bg-app-bg-soft">
-            <button
-              type="button"
-              onClick={() => moveSelectedItemToUnranked()}
-              className="flex min-h-20 items-center justify-center border-r-2 border-app-border p-2"
-            >
-              Unranked
-            </button>
-            {unrankedItems.map((item) => (
-              <RankingItemCard
-                key={`unranked-${item.id}`}
-                id={item.id}
-                title={item.title}
-                isSelected={selectedItemId === item.id}
-                onSelect={setSelectedItemId}
-              />
-            ))}
-          </div>
+          <UnrankedItemsSection
+            items={unrankedItems}
+            selectedItemId={selectedItemId}
+            onItemSelect={setSelectedItemId}
+            onMoveToUnranked={moveSelectedItemToUnranked}
+          />
         </section>
       </div>
     </main>
