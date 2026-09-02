@@ -1,7 +1,6 @@
 import { useParams } from "react-router";
 import { templates } from "../features/templates/templateData";
 import { NotFoundPage } from "./NotFoundPage";
-import RankingItemCard from "../components/RankingItemCard";
 import TierRow from "../components/TierRow";
 import { Fragment, useState } from "react";
 import UnrankedItemsSection from "../components/UnrankedItemsSection";
@@ -26,6 +25,8 @@ function TemplateRankingEditor({ template }: { template: Template }) {
   const [selectedItemId, setSelectedItemId] = useState<string | null>(null);
   const [selectedTierId, setSelectedTierId] = useState<string | null>(null);
 
+  // Editing states
+  const [editingTierId, setEditingTierId] = useState<string | null>(null);
   // Reset confirm button state
   const [isResetConfirmOpen, setIsResetConfirmOpen] = useState(false);
 
@@ -133,6 +134,13 @@ function TemplateRankingEditor({ template }: { template: Template }) {
   }
 
   // Tier editing functions
+
+  function handleTierSettingsClick(tierId: string) {
+    setEditingTierId((currentTierId) =>
+      currentTierId === tierId ? null : tierId,
+    );
+  }
+
   function updateTierName(tierId: string, newName: string) {
     setTiers((prevTiers) =>
       prevTiers.map((tier) =>
@@ -176,7 +184,6 @@ function TemplateRankingEditor({ template }: { template: Template }) {
             {tiers.map((tier) => (
               <Fragment key={tier.id}>
                 <TierRow
-                  key={tier.id}
                   name={tier.name}
                   id={tier.id}
                   color={tier.color}
@@ -185,8 +192,10 @@ function TemplateRankingEditor({ template }: { template: Template }) {
                   onItemSelect={setSelectedItemId}
                   isTierSelected={selectedTierId === tier.id}
                   onTierSelect={moveSelectedItemToTier}
+                  isEditing={editingTierId === tier.id}
+                  onSettingsClick={handleTierSettingsClick}
                 />
-                {selectedTierId === tier.id && !selectedItemId && (
+                {editingTierId === tier.id && (
                   <input
                     type="text"
                     className="bg-white text-black"
@@ -195,7 +204,7 @@ function TemplateRankingEditor({ template }: { template: Template }) {
                     }
                   />
                 )}
-                {selectedTierId === tier.id && !selectedItemId && (
+                {editingTierId === tier.id && (
                   <select
                     className="bg-white text-black"
                     value={tier.color}
@@ -213,6 +222,8 @@ function TemplateRankingEditor({ template }: { template: Template }) {
               </Fragment>
             ))}
           </div>
+
+          {editingTierId && <p>Editing tier: {editingTierId}</p>}
 
           {/* Reset template */}
           {!isResetConfirmOpen && (

@@ -13,6 +13,8 @@ type TierRowProps = {
     id: string;
     title: string;
   }[];
+  isEditing: boolean;
+  onSettingsClick: (id: string) => void;
 };
 
 const tierColorClasses: Record<string, string> = {
@@ -33,12 +35,14 @@ export default function TierRow({
   isItemSelected,
   selectedItem,
   onItemSelect,
+  isEditing,
+  onSettingsClick,
 }: TierRowProps) {
   const tierColorClass = tierColorClasses[color] ?? "bg-app-surface-elevated";
   return (
     <div
       key={id}
-      className="grid grid-cols-[7rem_minmax(0,1fr)] border-b border-app-border last:border-b-0"
+      className="grid grid-cols-[7rem_minmax(0,1fr)_3rem] border-b border-app-border last:border-b-0"
     >
       <button
         onClick={() => onTierSelect(id)}
@@ -64,6 +68,10 @@ export default function TierRow({
           />
         ))}
       </div>
+
+      <button type="button" onClick={() => onSettingsClick(id)}>
+        ⚙
+      </button>
     </div>
   );
 }
