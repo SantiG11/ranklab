@@ -4,6 +4,7 @@ import { NotFoundPage } from "./NotFoundPage";
 import TierRow from "../components/TierRow";
 import { Fragment, useState } from "react";
 import UnrankedItemsSection from "../components/UnrankedItemsSection";
+import TierSettings from "../components/TierSettings";
 
 type Template = (typeof templates)[number];
 
@@ -27,6 +28,10 @@ function TemplateRankingEditor({ template }: { template: Template }) {
 
   // Editing states
   const [editingTierId, setEditingTierId] = useState<string | null>(null);
+  const currentEditingTier = editingTierId
+    ? tiers.find((tier) => tier.id === editingTierId)
+    : undefined;
+
   // Reset confirm button state
   const [isResetConfirmOpen, setIsResetConfirmOpen] = useState(false);
 
@@ -141,6 +146,10 @@ function TemplateRankingEditor({ template }: { template: Template }) {
     );
   }
 
+  function closeTierSettings() {
+    setEditingTierId(null);
+  }
+
   function updateTierName(tierId: string, newName: string) {
     setTiers((prevTiers) =>
       prevTiers.map((tier) =>
@@ -195,35 +204,18 @@ function TemplateRankingEditor({ template }: { template: Template }) {
                   isEditing={editingTierId === tier.id}
                   onSettingsClick={handleTierSettingsClick}
                 />
-                {editingTierId === tier.id && (
-                  <input
-                    type="text"
-                    className="bg-white text-black"
-                    onChange={(event) =>
-                      updateTierName(tier.id, event.target.value)
-                    }
-                  />
-                )}
-                {editingTierId === tier.id && (
-                  <select
-                    className="bg-white text-black"
-                    value={tier.color}
-                    onChange={(event) =>
-                      updateTierColor(tier.id, event.target.value)
-                    }
-                  >
-                    <option value="tier-s">Red</option>
-                    <option value="tier-a">Orange</option>
-                    <option value="tier-b">Yellow</option>
-                    <option value="tier-c">Green</option>
-                    <option value="tier-d">Blue</option>
-                  </select>
-                )}
               </Fragment>
             ))}
           </div>
-
-          {editingTierId && <p>Editing tier: {editingTierId}</p>}
+          {/* Edit row */}
+          {currentEditingTier && (
+            <TierSettings
+              tier={currentEditingTier}
+              closeSettings={closeTierSettings}
+              setName={updateTierName}
+              setColor={updateTierColor}
+            />
+          )}
 
           {/* Reset template */}
           {!isResetConfirmOpen && (
