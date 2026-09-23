@@ -121,6 +121,17 @@ function TemplateRankingEditor({ template }: { template: Template }) {
     setSelectedTierId(null);
   }
 
+  // Add tier function
+  function addTier() {
+    const newTier = {
+      id: `tier-${crypto.randomUUID()}`,
+      name: "New Tier",
+      color: "tier-d",
+      items: [],
+    };
+    setTiers((prevTiers) => [...prevTiers, newTier]);
+  }
+
   // Reseting functions
   function resetTemplate() {
     setTiers(template.tiers);
@@ -213,6 +224,14 @@ function TemplateRankingEditor({ template }: { template: Template }) {
                 />
               </Fragment>
             ))}
+            {/* Add Row */}
+            <button
+              type="button"
+              onClick={addTier}
+              className="flex min-h-12 w-full items-center justify-center border border-app-border bg-app-surface-elevated transition hover:border-app-border-soft hover:bg-app-surface hover:shadow-lg hover:shadow-black/20"
+            >
+              Add row
+            </button>
           </div>
           {/* Edit row */}
           {currentEditingTier && (
