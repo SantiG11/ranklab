@@ -5,6 +5,7 @@ import TierRow from "../components/TierRow";
 import { Fragment, useState } from "react";
 import UnrankedItemsSection from "../components/UnrankedItemsSection";
 import TierSettings from "../components/TierSettings";
+import ResetConfirmation from "../components/ResetConfirmation";
 
 type Template = (typeof templates)[number];
 
@@ -34,6 +35,9 @@ function TemplateRankingEditor({ template }: { template: Template }) {
 
   // Reset confirm button state
   const [isResetConfirmOpen, setIsResetConfirmOpen] = useState(false);
+
+  // Explanation state
+  const [rankingExplanation, setRankingExplanation] = useState("");
 
   // Moving items functions
   function moveSelectedItemToTier(targetTierId: string) {
@@ -123,6 +127,8 @@ function TemplateRankingEditor({ template }: { template: Template }) {
     setUnrankedItems(template.unrankedItems);
     setSelectedItemId(null);
     setSelectedTierId(null);
+    setEditingTierId(null);
+    setRankingExplanation("");
   }
 
   function openResetConfirmation() {
@@ -165,6 +171,7 @@ function TemplateRankingEditor({ template }: { template: Template }) {
       ),
     );
   }
+
   return (
     <main className="app-page" onClick={() => setSelectedTierId(null)}>
       <div className="app-container flex flex-col gap-5 py-10">
@@ -229,28 +236,10 @@ function TemplateRankingEditor({ template }: { template: Template }) {
           )}
 
           {isResetConfirmOpen && (
-            <div className="app-container bg-app-bg-soft border rounded-xl border-app-border flex flex-col items-center gap-5 py-10">
-              <p className="app-title text-center text-xl">Reset ranking?</p>
-              <p className="app-subtitle text-center">
-                This will move all items back to the unranked area.
-              </p>
-              <div className="flex gap-5">
-                <button
-                  type="button"
-                  className="app-button-secondary"
-                  onClick={confirmResetRanking}
-                >
-                  Confirm
-                </button>
-                <button
-                  type="button"
-                  className="app-button-secondary"
-                  onClick={closeResetConfirmation}
-                >
-                  Cancel
-                </button>
-              </div>
-            </div>
+            <ResetConfirmation
+              onConfirm={confirmResetRanking}
+              onCancel={closeResetConfirmation}
+            />
           )}
 
           {/* Unranked items */}
@@ -259,6 +248,25 @@ function TemplateRankingEditor({ template }: { template: Template }) {
             selectedItemId={selectedItemId}
             onItemSelect={setSelectedItemId}
             onMoveToUnranked={moveSelectedItemToUnranked}
+          />
+        </section>
+
+        <section className="app-section flex w-full flex-col gap-4 p-5">
+          <div>
+            <h2 className="app-title text-2xl">Ranking explanation</h2>
+
+            <p className="app-subtitle mt-2">
+              Optional: explain the criteria or thoughts behind your ranking.
+            </p>
+          </div>
+
+          <textarea
+            name="explanation"
+            id="ranking-explanation"
+            className="min-h-36 w-full resize-y rounded-xl border border-app-border bg-app-bg-soft p-4 text-text-main outline-none transition focus:border-brand focus:ring-2 focus:ring-brand/40"
+            placeholder="Example: I ranked these based on personal enjoyment, nostalgia, and rewatch value."
+            onChange={(event) => setRankingExplanation(event.target.value)}
+            value={rankingExplanation}
           />
         </section>
       </div>
