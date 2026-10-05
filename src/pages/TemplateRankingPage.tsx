@@ -274,6 +274,7 @@ function TemplateRankingEditor({ template }: { template: Template }) {
               setName={updateTierName}
               setColor={updateTierColor}
               onDelete={() => deleteTier(currentEditingTier.id)}
+              canDelete={tiers.length > 2}
             />
           )}
 
