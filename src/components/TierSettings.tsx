@@ -5,6 +5,7 @@ type TierSettingsProps = {
   tier: Tier;
   setName: (id: string, value: string) => void;
   setColor: (id: string, value: string) => void;
+  onDelete: (id: string) => void;
   closeSettings: () => void;
 };
 
@@ -12,6 +13,7 @@ export default function TierSettings({
   tier,
   setName,
   setColor,
+  onDelete,
   closeSettings,
 }: TierSettingsProps) {
   const [newName, setNewName] = useState(tier.name);
@@ -79,6 +81,14 @@ export default function TierSettings({
             </select>
           </label>
         </div>
+
+        <button
+          type="button"
+          className="app-button-primary my-4 mx-auto"
+          onClick={() => onDelete(tier.id)}
+        >
+          Delete Tier
+        </button>
 
         <div className="mt-8 flex justify-end gap-3">
           <button

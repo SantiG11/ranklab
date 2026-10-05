@@ -132,6 +132,39 @@ function TemplateRankingEditor({ template }: { template: Template }) {
     setTiers((prevTiers) => [...prevTiers, newTier]);
   }
 
+  // Delete tier function
+  function deleteTier(tierId: string) {
+    if (tiers.length <= 2) return;
+
+    // Find the tier
+    const tierToRemove = tiers.find((tier) => tier.id === tierId);
+
+    if (!tierToRemove) return;
+
+    // Move the items of the tier to unranked
+    setUnrankedItems((prevItems) => [...prevItems, ...tierToRemove.items]);
+
+    // Remove the tier
+    setTiers((prevTiers) => prevTiers.filter((tier) => tier.id !== tierId));
+
+    // If an item was selected is reset
+    const selectedItemWasDeleted = tierToRemove.items.some(
+      (item) => item.id === selectedItemId,
+    );
+
+    if (selectedItemWasDeleted) {
+      setSelectedItemId(null);
+    }
+
+    if (selectedTierId === tierId) {
+      setSelectedTierId(null);
+    }
+
+    if (editingTierId === tierId) {
+      setEditingTierId(null);
+    }
+  }
+
   // Reseting functions
   function resetTemplate() {
     setTiers(template.tiers);
@@ -230,7 +263,7 @@ function TemplateRankingEditor({ template }: { template: Template }) {
               onClick={addTier}
               className="flex min-h-12 w-full items-center justify-center border border-app-border bg-app-surface-elevated transition hover:border-app-border-soft hover:bg-app-surface hover:shadow-lg hover:shadow-black/20"
             >
-              Add row
+              Add tier
             </button>
           </div>
           {/* Edit row */}
@@ -240,6 +273,7 @@ function TemplateRankingEditor({ template }: { template: Template }) {
               closeSettings={closeTierSettings}
               setName={updateTierName}
               setColor={updateTierColor}
+              onDelete={() => deleteTier(currentEditingTier.id)}
             />
           )}
 
