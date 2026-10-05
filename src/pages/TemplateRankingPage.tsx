@@ -218,27 +218,31 @@ function TemplateRankingEditor({ template }: { template: Template }) {
 
   return (
     <main className="app-page" onClick={() => setSelectedTierId(null)}>
-      <div className="app-container flex flex-col gap-5 py-10">
+      <div className="app-container flex flex-col gap-6 py-8 sm:py-10">
         {/* Title section */}
-        <section className="app-section flex flex-col gap-2 p-4">
-          <h1 className="app-title mt-3 text-center text-5xl">
+        <section className="py-2 sm:py-4">
+          <p className="app-label">{template.category}</p>
+          <h1 className="app-title mt-2 text-3xl sm:text-4xl">
             {template.title}
           </h1>
 
-          <p className="app-subtitle text-center mt-3">
+          <p className="app-subtitle mt-3 max-w-2xl leading-6">
             {template.description}
-          </p>
-
-          <p className=" text-text-soft text-right">
-            Category: <span className="font-bold">{template.category}</span>
           </p>
         </section>
 
         {/* Ranking section */}
-        <section className="app-section flex w-full flex-col items-center gap-5 p-5">
+        <section className="app-section flex w-full flex-col gap-6 p-3 sm:p-5">
+          <div>
+            <h2 className="app-title text-xl">Your ranking</h2>
+            <p className="app-subtitle mt-1 text-sm">
+              Select an item, then choose a tier to place it.
+            </p>
+          </div>
+
           {/* Tiers */}
           <div
-            className="w-full max-w-5xl overflow-hidden rounded-2xl border border-app-border"
+            className="w-full overflow-hidden rounded-xl border border-app-border"
             onClick={(event) => event.stopPropagation()}
           >
             {tiers.map((tier) => (
@@ -252,7 +256,6 @@ function TemplateRankingEditor({ template }: { template: Template }) {
                   onItemSelect={setSelectedItemId}
                   isTierSelected={selectedTierId === tier.id}
                   onTierSelect={moveSelectedItemToTier}
-                  isEditing={editingTierId === tier.id}
                   onSettingsClick={handleTierSettingsClick}
                 />
               </Fragment>
@@ -261,9 +264,9 @@ function TemplateRankingEditor({ template }: { template: Template }) {
             <button
               type="button"
               onClick={addTier}
-              className="flex min-h-12 w-full items-center justify-center border border-app-border bg-app-surface-elevated transition hover:border-app-border-soft hover:bg-app-surface hover:shadow-lg hover:shadow-black/20"
+              className="flex min-h-12 w-full items-center justify-center gap-2 border-t border-app-border bg-app-surface-elevated px-4 text-sm font-semibold text-text-muted transition hover:bg-app-surface hover:text-text-main focus:relative focus:z-10 focus:outline-none focus:ring-2 focus:ring-brand focus:ring-inset"
             >
-              Add tier
+              <span aria-hidden="true" className="text-lg">+</span> Add tier
             </button>
           </div>
           {/* Edit row */}
@@ -278,38 +281,30 @@ function TemplateRankingEditor({ template }: { template: Template }) {
             />
           )}
 
-          {/* Reset template */}
-          {!isResetConfirmOpen && (
-            <button
-              type="button"
-              onClick={openResetConfirmation}
-              className="app-button-secondary"
-            >
-              Reset Ranking
-            </button>
-          )}
-
-          {isResetConfirmOpen && (
-            <ResetConfirmation
-              onConfirm={confirmResetRanking}
-              onCancel={closeResetConfirmation}
-            />
-          )}
-
           {/* Unranked items */}
-          <UnrankedItemsSection
-            items={unrankedItems}
-            selectedItemId={selectedItemId}
-            onItemSelect={setSelectedItemId}
-            onMoveToUnranked={moveSelectedItemToUnranked}
-          />
+          <div className="flex flex-col gap-3">
+            <div>
+              <h2 className="app-title text-lg">Unranked items</h2>
+              <p className="app-subtitle mt-1 text-sm">
+                Items waiting to be placed, or moved back from a tier.
+              </p>
+            </div>
+            <UnrankedItemsSection
+              items={unrankedItems}
+              selectedItemId={selectedItemId}
+              onItemSelect={setSelectedItemId}
+              onMoveToUnranked={moveSelectedItemToUnranked}
+            />
+          </div>
         </section>
 
-        <section className="app-section flex w-full flex-col gap-4 p-5">
+        <section className="app-section flex w-full flex-col gap-4 p-4 sm:p-5">
           <div>
-            <h2 className="app-title text-2xl">Ranking explanation</h2>
+            <h2 id="ranking-explanation-title" className="app-title text-2xl">
+              Ranking explanation
+            </h2>
 
-            <p className="app-subtitle mt-2">
+            <p id="ranking-explanation-help" className="app-subtitle mt-2">
               Optional: explain the criteria or thoughts behind your ranking.
             </p>
           </div>
@@ -317,12 +312,31 @@ function TemplateRankingEditor({ template }: { template: Template }) {
           <textarea
             name="explanation"
             id="ranking-explanation"
-            className="min-h-36 w-full resize-y rounded-xl border border-app-border bg-app-bg-soft p-4 text-text-main outline-none transition focus:border-brand focus:ring-2 focus:ring-brand/40"
+            aria-labelledby="ranking-explanation-title"
+            aria-describedby="ranking-explanation-help"
+            className="app-field min-h-36 w-full resize-y"
             placeholder="Example: I ranked these based on personal enjoyment, nostalgia, and rewatch value."
             onChange={(event) => setRankingExplanation(event.target.value)}
             value={rankingExplanation}
           />
         </section>
+
+        <div className="flex justify-end border-t border-app-border pt-6">
+          <button
+            type="button"
+            onClick={openResetConfirmation}
+            className="app-button-secondary"
+          >
+            Reset ranking
+          </button>
+        </div>
+
+        {isResetConfirmOpen && (
+          <ResetConfirmation
+            onConfirm={confirmResetRanking}
+            onCancel={closeResetConfirmation}
+          />
+        )}
       </div>
     </main>
   );

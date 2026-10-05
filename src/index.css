@@ -55,6 +55,7 @@ body {
   min-width: 320px;
   min-height: 100vh;
   background-color: var(--color-app-bg);
+  color-scheme: dark;
 }
 
 button,
@@ -74,11 +75,11 @@ button {
   }
 
   .app-container {
-    @apply mx-auto max-w-6xl px-6;
+    @apply mx-auto max-w-6xl px-4 sm:px-6;
   }
 
   .app-section {
-    @apply rounded-3xl border border-app-border bg-app-surface;
+    @apply rounded-2xl border border-app-border bg-app-surface;
   }
 
   .app-card {
@@ -102,10 +103,18 @@ button {
   }
 
   .app-button-primary {
-    @apply rounded-xl bg-brand px-5 py-3 text-sm font-semibold text-white transition hover:bg-brand-hover;
+    @apply inline-flex min-h-11 items-center justify-center rounded-lg bg-brand px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-brand-hover focus:outline-none focus:ring-2 focus:ring-brand-hover focus:ring-offset-2 focus:ring-offset-app-bg;
   }
 
   .app-button-secondary {
-    @apply rounded-xl border border-app-border bg-app-surface-elevated px-5 py-3 text-sm font-semibold text-text-soft transition hover:border-app-border-soft hover:text-text-main;
+    @apply inline-flex min-h-11 items-center justify-center rounded-lg border border-app-border bg-app-surface-elevated px-5 py-2.5 text-sm font-semibold text-text-soft transition hover:border-app-border-soft hover:bg-app-bg-soft hover:text-text-main focus:outline-none focus:ring-2 focus:ring-brand focus:ring-offset-2 focus:ring-offset-app-bg;
+  }
+
+  .app-button-danger {
+    @apply inline-flex min-h-11 items-center justify-center rounded-lg border border-red-500/50 bg-red-500/10 px-5 py-2.5 text-sm font-semibold text-red-300 transition hover:border-red-400 hover:bg-red-500/20 hover:text-red-200 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 focus:ring-offset-app-bg disabled:cursor-not-allowed disabled:opacity-40;
+  }
+
+  .app-field {
+    @apply rounded-lg border border-app-border bg-app-bg-soft px-4 py-3 text-text-main outline-none transition placeholder:text-text-muted/70 hover:border-app-border-soft focus:border-brand focus:ring-2 focus:ring-brand/30;
   }
 }

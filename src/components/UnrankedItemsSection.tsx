@@ -15,23 +15,25 @@ export default function UnrankedItemsSection({
   onMoveToUnranked,
 }: UnrankedItemsSectionProps) {
   return (
-    <div className="grid min-h-[7rem] w-full max-w-5xl grid-cols-[repeat(auto-fill,minmax(7rem,1fr))] gap-0 overflow-hidden rounded-2xl border border-app-border bg-app-bg-soft">
+    <div className="w-full overflow-hidden rounded-xl border border-app-border bg-app-bg-soft sm:grid sm:grid-cols-[6.5rem_minmax(0,1fr)]">
       <button
         type="button"
         onClick={onMoveToUnranked}
-        className="flex min-h-20 items-center justify-center border-r-2 border-app-border p-2"
+        className="flex min-h-14 w-full items-center justify-between border-b border-app-border bg-app-surface-elevated px-4 text-sm font-semibold text-text-soft transition hover:bg-app-surface hover:text-text-main focus:relative focus:z-10 focus:outline-none focus:ring-2 focus:ring-brand focus:ring-inset sm:min-h-24 sm:justify-center sm:border-r sm:border-b-0 sm:px-2"
       >
         Unranked
       </button>
-      {items.map((item) => (
-        <RankingItemCard
-          key={`unranked-${item.id}`}
-          id={item.id}
-          title={item.title}
-          isSelected={selectedItemId === item.id}
-          onSelect={onItemSelect}
-        />
-      ))}
+      <div className="grid min-h-[5.75rem] min-w-0 grid-cols-[repeat(auto-fill,5.75rem)] sm:min-h-[6.5rem] sm:grid-cols-[repeat(auto-fill,6.5rem)]">
+        {items.map((item) => (
+          <RankingItemCard
+            key={`unranked-${item.id}`}
+            id={item.id}
+            title={item.title}
+            isSelected={selectedItemId === item.id}
+            onSelect={onItemSelect}
+          />
+        ))}
+      </div>
     </div>
   );
 }

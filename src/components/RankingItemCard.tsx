@@ -16,15 +16,15 @@ export default function RankingItemCard({
       type="button"
       onClick={() => onSelect(id)}
       aria-pressed={isSelected}
-      className={`aspect-square min-w-0 overflow-hidden border text-left transition-all duration-200 ease-out focus:outline-none focus:ring-2 focus:ring-brand focus:ring-offset-2 focus:ring-offset-app-bg active:scale-[0.97] ${
+      className={`aspect-square min-w-0 overflow-hidden border border-app-border text-left transition duration-150 ease-out focus:relative focus:z-10 focus:outline-none focus:ring-2 focus:ring-brand focus:ring-inset active:scale-[0.98] ${
         isSelected
-          ? "border-brand bg-brand-soft shadow-[0_0_0_1px_rgba(124,58,237,0.35)] hover:border-brand-hover hover:bg-brand"
-          : "border-app-border bg-app-surface-elevated hover:-translate-y-0.5 hover:border-app-border-soft hover:bg-app-surface hover:shadow-lg hover:shadow-black/20"
+          ? "relative z-10 border-brand bg-brand-soft shadow-[inset_0_0_0_1px_rgba(139,92,246,0.35)] hover:border-brand-hover"
+          : "bg-app-surface-elevated hover:relative hover:z-10 hover:border-app-border-soft hover:bg-app-surface"
       }`}
     >
       <div className="flex h-full w-full items-center justify-center p-2">
         <p
-          className={`text-center text-sm font-semibold transition-colors duration-200 ${
+          className={`break-words text-center text-xs font-semibold leading-snug transition-colors sm:text-sm ${
             isSelected ? "text-text-main" : "text-text-soft"
           }`}
         >

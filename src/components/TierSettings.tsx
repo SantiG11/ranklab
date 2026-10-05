@@ -35,19 +35,19 @@ export default function TierSettings({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 px-4"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 px-4 py-6 backdrop-blur-[2px]"
       role="dialog"
       aria-modal="true"
       aria-labelledby="tier-settings-title"
       onClick={closeSettings}
     >
       <div
-        className="w-full max-w-md rounded-2xl border border-app-border bg-app-surface p-6 shadow-2xl shadow-black/40"
+        className="max-h-full w-full max-w-md overflow-y-auto rounded-2xl border border-app-border bg-app-surface p-5 shadow-2xl shadow-black/50 sm:p-6"
         onClick={(event) => event.stopPropagation()}
       >
         {!isDeleteConfirmOpen ? (
           <>
-            <div className="mb-6 text-center">
+            <div className="mb-6">
               <p className="app-label">Tier settings</p>
 
               <h2 id="tier-settings-title" className="app-title mt-2 text-2xl">
@@ -68,7 +68,7 @@ export default function TierSettings({
                 <input
                   type="text"
                   value={newName}
-                  className="rounded-xl border border-app-border bg-app-bg-soft px-4 py-3 text-text-main outline-none transition focus:border-brand focus:ring-2 focus:ring-brand/40"
+                  className="app-field"
                   onChange={(event) => setNewName(event.target.value)}
                 />
               </label>
@@ -80,7 +80,7 @@ export default function TierSettings({
 
                 <select
                   value={newColor}
-                  className="rounded-xl border border-app-border bg-app-bg-soft px-4 py-3 text-text-main outline-none transition focus:border-brand focus:ring-2 focus:ring-brand/40"
+                  className="app-field"
                   onChange={(event) => setNewColor(event.target.value)}
                 >
                   <option value="tier-s">Red</option>
@@ -92,8 +92,8 @@ export default function TierSettings({
               </label>
             </div>
 
-            <div className="mt-8 flex flex-col gap-4">
-              <div className="flex justify-end gap-3">
+            <div className="mt-8 flex flex-col gap-5">
+              <div className="flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
                 <button
                   type="button"
                   className="app-button-secondary"
@@ -116,7 +116,7 @@ export default function TierSettings({
                   type="button"
                   disabled={!canDelete}
                   onClick={() => setIsDeleteConfirmOpen(true)}
-                  className="w-full rounded-xl border border-red-500/40 bg-red-500/10 px-5 py-3 text-sm font-semibold text-red-400 transition hover:border-red-500 hover:bg-red-500/20 disabled:cursor-not-allowed disabled:opacity-40"
+                  className="app-button-danger w-full"
                 >
                   Delete tier
                 </button>
@@ -131,17 +131,19 @@ export default function TierSettings({
           </>
         ) : (
           <div className="flex flex-col gap-6">
-            <div className="text-center">
+            <div>
               <p className="text-sm font-medium text-red-400">Delete tier</p>
 
-              <h2 className="app-title mt-2 text-2xl">Delete "{tier.name}"?</h2>
+              <h2 id="tier-settings-title" className="app-title mt-2 text-2xl">
+                Delete "{tier.name}"?
+              </h2>
 
               <p className="app-subtitle mt-3">
                 Items currently in this tier will be moved back to Unranked.
               </p>
             </div>
 
-            <div className="flex justify-end gap-3">
+            <div className="flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
               <button
                 type="button"
                 className="app-button-secondary"
@@ -153,7 +155,7 @@ export default function TierSettings({
               <button
                 type="button"
                 onClick={handleDelete}
-                className="rounded-xl bg-red-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-red-500"
+                className="app-button-danger border-red-600 bg-red-600 text-white hover:bg-red-500"
               >
                 Delete tier
               </button>
