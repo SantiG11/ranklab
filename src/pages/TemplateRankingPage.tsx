@@ -2,10 +2,27 @@ import { useParams } from "react-router";
 import { templates } from "../features/templates/templateData";
 import { NotFoundPage } from "./NotFoundPage";
 import TierRow from "../components/TierRow";
-import { Fragment, useState } from "react";
+import { Fragment, useState, useEffect } from "react";
 import UnrankedItemsSection from "../components/UnrankedItemsSection";
 import TierSettings from "../components/TierSettings";
 import ResetConfirmation from "../components/ResetConfirmation";
+import type { PersistedRanking } from "../features/templates/templateTypes";
+
+// Persistence
+function loadPersistedRanking(storageKey: string): PersistedRanking | null {
+  const savedRanking = localStorage.getItem(storageKey);
+
+  if (!savedRanking) {
+    return null;
+  }
+
+  try {
+    return JSON.parse(savedRanking) as PersistedRanking;
+  } catch (error) {
+    console.warn("Could not load persisted ranking", error);
+    return null;
+  }
+}
 
 type Template = (typeof templates)[number];
 
@@ -15,13 +32,23 @@ export function TemplateRankingPage() {
 
   if (!template) return <NotFoundPage />;
 
-  return <TemplateRankingEditor template={template} />;
+  return <TemplateRankingEditor key={template.id} template={template} />;
 }
 
 function TemplateRankingEditor({ template }: { template: Template }) {
+  const storageKey = `ranklab:ranking:${template.id}`;
+
   // Tiers states
-  const [tiers, setTiers] = useState(template.tiers);
-  const [unrankedItems, setUnrankedItems] = useState(template.unrankedItems);
+  const [tiers, setTiers] = useState(() => {
+    const persistedRanking = loadPersistedRanking(storageKey);
+
+    return persistedRanking?.tiers ?? template.tiers;
+  });
+  const [unrankedItems, setUnrankedItems] = useState(() => {
+    const persistedRanking = loadPersistedRanking(storageKey);
+
+    return persistedRanking?.unrankedItems ?? template.unrankedItems;
+  });
 
   // Selected item and tier states
   const [selectedItemId, setSelectedItemId] = useState<string | null>(null);
@@ -37,7 +64,22 @@ function TemplateRankingEditor({ template }: { template: Template }) {
   const [isResetConfirmOpen, setIsResetConfirmOpen] = useState(false);
 
   // Explanation state
-  const [rankingExplanation, setRankingExplanation] = useState("");
+  const [rankingExplanation, setRankingExplanation] = useState(() => {
+    const persistedRanking = loadPersistedRanking(storageKey);
+
+    return persistedRanking?.rankingExplanation ?? "";
+  });
+
+  // Storing ranking state
+  useEffect(() => {
+    const rankingToPersist: PersistedRanking = {
+      tiers,
+      unrankedItems,
+      rankingExplanation,
+    };
+
+    localStorage.setItem(storageKey, JSON.stringify(rankingToPersist));
+  }, [tiers, unrankedItems, rankingExplanation, storageKey]);
 
   // Moving items functions
   function moveSelectedItemToTier(targetTierId: string) {
@@ -266,7 +308,10 @@ function TemplateRankingEditor({ template }: { template: Template }) {
               onClick={addTier}
               className="flex min-h-12 w-full items-center justify-center gap-2 border-t border-app-border bg-app-surface-elevated px-4 text-sm font-semibold text-text-muted transition hover:bg-app-surface hover:text-text-main focus:relative focus:z-10 focus:outline-none focus:ring-2 focus:ring-brand focus:ring-inset"
             >
-              <span aria-hidden="true" className="text-lg">+</span> Add tier
+              <span aria-hidden="true" className="text-lg">
+                +
+              </span>{" "}
+              Add tier
             </button>
           </div>
           {/* Edit row */}

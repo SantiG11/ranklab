@@ -18,3 +18,9 @@ export type Template = {
   tiers: Tier[];
   unrankedItems: RankingItem[];
 };
+
+export type PersistedRanking = {
+  tiers: Tier[];
+  unrankedItems: RankingItem[];
+  rankingExplanation: string;
+};
